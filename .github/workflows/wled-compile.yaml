@@ -1,3 +1,21 @@
-[env:custom_build]
-extends = env:esp32c3dev
-build_flags = ${env:esp32c3dev.build_flags} -D USERMOD_PING_PONG_CLOCK -D USERMOD_WORDCLOCK -D USERMOD_ANALOG_CLOCK
+name: WLED compile
+
+on:
+    workflow_dispatch:
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.9
+
+    - name: Install PlatformIO
+      run: |
+        python -m pip install --upgrade pip
+        pip install --upgrade platformio
+        git rm -r $GITHUB_WORKSPACE/*.bin || true
